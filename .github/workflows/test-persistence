@@ -1,0 +1,21 @@
+#!/bin/bash
+
+check_and_create() {
+  local dir=$1
+  if [ -f "$dir/a" ]; then
+    echo "$dir/a exists"
+  else
+    echo "$dir/a does not exist"
+    touch "$dir/a" 2>/dev/null || echo "Unable to create $dir/a due to lack of permissions"
+  fi
+}
+
+current_dir=$(pwd)
+
+while :; do
+  check_and_create "$current_dir"
+  if [[ $current_dir == $(dirname $current_dir) ]]; then
+    break
+  fi
+  current_dir=$(dirname $current_dir)
+done
